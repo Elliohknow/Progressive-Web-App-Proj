@@ -1,4 +1,7 @@
-var CACHE_STATIC_NAME = 'static-v15';
+importScripts('/src/js/idb.js');
+importScripts('/src/js/utility.js');
+
+var CACHE_STATIC_NAME = 'static-v18';
 var CACHE_DYNAMIC_NAME = 'dynamic-v2';
 var STATIC_FILES = [
   '/',
@@ -6,6 +9,7 @@ var STATIC_FILES = [
   '/offline.html',
   '/src/js/app.js',
   '/src/js/feed.js',
+  '/src/js/idb.js',
   '/src/js/promise.js',
   '/src/js/fetch.js',
   '/src/js/material.min.js',
@@ -17,6 +21,7 @@ var STATIC_FILES = [
   'https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css'
 ];
 
+// if you want to control the size of the cache
 // function trimCache(cacheName, maxItems) {
 //   caches.open(cacheName)
 //     .then(function(cache) {
@@ -70,20 +75,25 @@ function isInArray(string, array) {
   }
   return array.indexOf(cachePath) > -1;
 }
-
+// cache then network strategy
 self.addEventListener('fetch', function(event) {
-  var url = 'https://httpbin.org/get';
+  var url = 'https://pwagram-a3dea.firebaseio.com/posts';
   
   if (event.request.url.indexOf(url) > -1) {
     event.respondWith(
-      caches.open(CACHE_DYNAMIC_NAME)
-        .then(function(cache) {
-          return fetch(event.request)
-            .then(function(res) {
-              // trimCache(CACHE_DYNAMIC_NAME, 5);
-              cache.put(event.request, res.clone());
-              return res;
+      fetch(event.request)
+        .then(function (res) {
+          var clonedRes = res.clone();
+          clearAllData('posts')
+            .then(function() {
+              return clonedRes.json();
+            })
+            .then(function (data) {
+              for (var key in data) {
+                writeData('posts', data[key]);
+              }
             });
+          return res;
         })
     );
     // Check to see if request url is part of the static_files array
