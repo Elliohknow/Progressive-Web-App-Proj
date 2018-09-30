@@ -12,7 +12,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css">
   <link rel="stylesheet" href="/src/css/app.css">
   <link rel="stylesheet" href="/src/css/feed.css">
-  <link rel="manifest" href="/src/manifest.json">
+  <link rel="manifest" href="/manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="PWAGram">
@@ -26,8 +26,8 @@
   <link rel="apple-touch-icon" href="/src/images/icons/apple-icon-152x152.png" sizes="152x152">
   <link rel="apple-touch-icon" href="/src/images/icons/apple-icon-180x180.png" sizes="180x180">
   <meta name="msapplication-TileImage" content="/src/images/icons/app-icon-144x144.png">
-  <meta name="msapplication-TileColor" content="#fff">
-  <meta name="theme-color" content="#3f51b5">
+  <meta name="msapplication-TileColor" content="#f5f5f5">
+  <meta name="theme-color" content="#1d7502">
 </head>
 <body>
 
@@ -44,7 +44,7 @@
           <a class="mdl-navigation__link" href="/">Feed</a>
           <a class="mdl-navigation__link" href="/help">Help</a>
           <div class="drawer-option">
-            <button class="enable-notifications mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent">
+            <button class="enable-notifications mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
               Enable Notifications
             </button>
           </div>
@@ -57,7 +57,7 @@
         <a class="mdl-navigation__link" href="/">Feed</a>
         <a class="mdl-navigation__link" href="/help">Help</a>
         <div class="drawer-option">
-          <button class="enable-notifications mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent">
+          <button class="enable-notifications mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
             Enable Notifications
           </button>
         </div>
@@ -65,6 +65,15 @@
     </div>
     <main class="mdl-layout__content mat-typography">
       <div id="create-post">
+        <video id="player" autoplay></video>
+        <canvas id="canvas" width="300px" height="216px"></canvas>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="capture-btn">
+          Capture
+        </button>
+        <div id="pick-image">
+          <h6>Choose an Image instead</h6>
+          <input type="file" accept="image/*" id="image-picker">
+        </div>
         <form>
           <div class="input-section mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
             <input class="mdl-textfield__input" type="text" id="title">
@@ -74,30 +83,38 @@
             <input class="mdl-textfield__input" type="text" id="location">
             <label class="mdl-textfield__label" for="location" name="location">Location</label>
           </div>
+          <div class="input-section">
+            <button class="mdl-button mdl-js-button mdl-button--colored" id="location-btn">
+              Get Location
+            </button>
+            <div class="mdl-spinner mdl-js-spinner is-active" id="location-loader"></div>
+          </div>
           <br>
           <div>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--accent"
-                    type="submit" id="post-btn">Post!
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit" id="post-btn">
+              Post!
             </button>
           </div>
           <br>
           <div>
-            <button class="mdl-button mdl-js-button mdl-button--fab" id="close-create-post-modal-btn" type="button">
+            <button class="mdl-button mdl-js-button mdl-button--fab" type="button" id="close-create-post-modal-btn">
               <i class="material-icons">close</i>
             </button>
           </div>
         </form>
       </div>
-      <img src="/src/images/druid_conjure_landscape.jpg"
-           alt="Summonitsummonitsummonit!"
+      <img src="/src/images/druid-landscape.jpg"
+           srcset="/src/images/druid-landscape-lg.jpg 1200w,
+                   /src/images/druid-landscape.jpg 900w,
+                   /src/images/druid-landscape-sm.jpg 480w"
+           alt="A Druid greets you!"
            class="main-image">
       <div class="page-content">
         <h5 class="text-center mdl-color-text--primary">Share your Moments</h5>
         <div id="shared-moments"></div>
       </div>
       <div class="floating-button">
-        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored"
-                id="share-image-button">
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" id="share-image-button">
           <i class="material-icons">add</i>
         </button>
       </div>

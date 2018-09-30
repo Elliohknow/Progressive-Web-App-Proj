@@ -1,4 +1,17 @@
 .idea
 .DS_Store
 node_modules/
+**/node_modules/*
 tinker/
+**/functions
+**/.firebaserc
+**/package-lock.json
+pwagram-fb-key.json
+**/firebase/*
+../.firebase/
+../functions/package-lock.json
+../functions/pwagram-firebase-key.json
+../functions/index.js
+
+/functions/
+/.firebase/
