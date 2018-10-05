@@ -2,7 +2,6 @@ var functions = require("firebase-functions");
 var admin = require("firebase-admin");
 var cors = require("cors")({ origin: true });
 var webpush = require("web-push");
-// var formidable = require("formidable");
 var fs = require("fs");
 var UUID = require("uuid-v4");
 var os = require("os");
@@ -28,7 +27,7 @@ admin.initializeApp({
 });
 
 exports.storePostData = functions.https.onRequest(function(request, response) {
-  cors(request, response, function() {
+  cors(request, response, function () {
     var uuid = UUID();
 
     const busboy = new Busboy({ headers: request.headers });

@@ -7,7 +7,7 @@ if (!window.Promise) {
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
-    .register('/sw.js')
+    .register('/service-worker.js')
     .then(function() {
       console.log('Service worker registered!');
     })
@@ -125,7 +125,7 @@ function askForNotificationPermission() {
         console.log('Notification permission granted!');
         configurePushSub();
         // displayConfirmNotification();
-        // TODO: code to hide/show notifications button
+        // TODO: code to hide/show notifications toggle
       }
   });
 }
@@ -138,3 +138,15 @@ if ('Notification' in window && 'serviceWorker' in navigator) {
 } else {
   console.log('This \'ere browser don\'t take too kindly to support\'n notifications, fella\'.');
 }
+
+// Workbox is now available in two different versions: 2.x  and 3.x
+
+// There have been some major changes from 2.x => 3.x, you find a detailed migration guide here: https://developers.google.com/web/tools/workbox/guides/migrations/migrate-from-v2
+
+// For this module, the following breaking change is important:
+
+// Use precacheAndRoute()  instead of precache() in the sw - base.js  file
+
+// You don't have to update to 3.x if you don't want to.In order to get the same version as used in this module, you can simply install version 2:
+
+// npm install--save - dev workbox - cli@^ 2 
