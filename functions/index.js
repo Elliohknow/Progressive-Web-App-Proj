@@ -1,25 +1,32 @@
-var functions = require("firebase-functions");
-var admin = require("firebase-admin");
-var cors = require("cors")({ origin: true });
-var webpush = require("web-push");
-var fs = require("fs");
-var UUID = require("uuid-v4");
-var os = require("os");
-var Busboy = require("busboy");
-var path = require('path');
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+const cors = require("cors");
+const webpush = require("web-push");
+const fs = require("fs");
+const UUID = require("uuid-v4");
+const os = require("os");
+const Busboy = require("busboy");
+const path = require('path');
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
-//
+// import * as cors from 'cors';
+// const corsHandler = cors({ origin: true });
 
-var serviceAccount = require("./pwagram-fb-key.json");
+// export const pingFunctionWithCorsAllowed = functions.https.onRequest((request, response) => {
+//   corsHandler(request, response, () => {
+//     response.send(`Ping from Firebase (with CORS handling)! ${new Date().toISOString()}`);
+//   });
+// });
+const corsHandler = cors({ origin: true });
+const serviceAccount = require("./pwagram-fb-key.json");
 
-var gcconfig = {
+const gcconfig = {
   projectId: "pwagram-a3dea",
   keyFilename: "pwagram-fb-key.json"
 };
 
-var gcs = require('@google-cloud/storage')(gcconfig);
+const gcs = require("@google-cloud/storage")(gcconfig);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -27,8 +34,8 @@ admin.initializeApp({
 });
 
 exports.storePostData = functions.https.onRequest(function(request, response) {
-  cors(request, response, function () {
-    var uuid = UUID();
+  corsHandler(request, response, function () {
+    const uuid = UUID();
 
     const busboy = new Busboy({ headers: request.headers });
     // These objects will store the values (file + fields) extracted from busboy
@@ -46,13 +53,13 @@ exports.storePostData = functions.https.onRequest(function(request, response) {
     });
 
     // This will invoked on every field detected
-    busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
+    busboy.on("field", function(fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) {
       fields[fieldname] = val;
     });
 
     // This callback will be invoked after all uploaded files are saved.
     busboy.on("finish", () => {
-      var bucket = gcs.bucket("pwagram-a3dea.appspot.com");
+      const bucket = gcs.bucket("pwagram-a3dea.appspot.com");
       bucket.upload(
         upload.file,
         {
@@ -70,8 +77,9 @@ exports.storePostData = functions.https.onRequest(function(request, response) {
               .database()
               .ref("posts")
               .push({
+                id: fields.id, // my add, might not work
                 title: fields.title,
-                location: fields.location,
+                location: fields.location, // my add, could cause error
                 rawLocation: {
                   lat: fields.rawLocationLat,
                   lng: fields.rawLocationLng
@@ -97,7 +105,7 @@ exports.storePostData = functions.https.onRequest(function(request, response) {
               })
               .then(function(subscriptions) {
                 subscriptions.forEach(function(sub) {
-                  var pushConfig = {
+                  const pushConfig = {
                     endpoint: sub.val().endpoint,
                     keys: {
                       auth: sub.val().keys.auth,

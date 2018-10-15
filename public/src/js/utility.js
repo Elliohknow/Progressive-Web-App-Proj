@@ -1,10 +1,9 @@
-
-var dbPromise = idb.open('posts-store', 1, function (db) {
-  if (!db.objectStoreNames.contains('posts')) {
-    db.createObjectStore('posts', { keyPath: 'id' });
+var dbPromise = idb.open("posts-store", 1, function (db) {
+  if (!(db.objectStoreNames.contains("posts"))) {
+    db.createObjectStore("posts", {keyPath: "id"});
   }
-  if (!db.objectStoreNames.contains('sync-posts')) {
-    db.createObjectStore('sync-posts', { keyPath: 'id' });
+  if (!(db.objectStoreNames.contains("sync-posts"))) {
+    db.createObjectStore("sync-posts", {keyPath: "id"});
   }
 });
 
@@ -46,7 +45,7 @@ function deleteItemFromData(st, id) {
       return tx.complete;
     })
     .then(function () {
-      console.log('Item deleted!');
+      console.log('Item deleted from ' + st + '!');
     });
 }
 
@@ -67,7 +66,7 @@ function urlBase64ToUint8Array(base64String) {
 
 function dataURItoBlob(dataURI) {
   var byteString = atob(dataURI.split(',')[1]);
-  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
   var ab = new ArrayBuffer(byteString.length);
   var ia = new Uint8Array(ab);
   for (var i = 0; i < byteString.length; i++) {

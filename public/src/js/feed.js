@@ -57,11 +57,11 @@ function initializeMedia() {
   if (!('getUserMedia' in navigator.mediaDevices)) {
     navigator.mediaDevices.getUserMedia = function (constraints) {
       var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-      // if no support, results in an error
+
       if (!getUserMedia) {
         return Promise.reject(new Error('getUserMedia is not implemented!'));
       }
-      // if supported, result will be consistent with modern syntax 
+
       return new Promise(function (resolve, reject) {
         getUserMedia.call(navigator, constraints, resolve, reject);
       });
@@ -82,9 +82,7 @@ captureButton.addEventListener('click', function (event) {
   canvasElement.style.display = 'block';
   videoPlayer.style.display = 'none';
   captureButton.style.display = 'none';
-
   var context = canvasElement.getContext('2d');
-
   context.drawImage(videoPlayer, 0, 0, canvas.width, videoPlayer.videoHeight / (videoPlayer.videoWidth / canvas.width));
   videoPlayer.srcObject.getVideoTracks().forEach(function (track) {
     track.stop();
@@ -94,7 +92,7 @@ captureButton.addEventListener('click', function (event) {
 
 imagePicker.addEventListener('change', function (event) {
   picture = event.target.files[0];
-})
+});
 
 function openCreatePostModal() {
   // createPostArea.style.display = 'block';
@@ -206,14 +204,6 @@ function updateUI(data) {
     createCard(data[i]);
   }
 }
-// method to process the database objects as an array
-// function toArray(data) { 
-//   var arr = [];
-//   for (var key in data) {
-//     arr.push(data[key]);
-//   }
-//   return arr;
-// }
 
 var url = 'https://pwagram-a3dea.firebaseio.com/posts.json';
 var networkDataReceived = false;
@@ -259,7 +249,7 @@ function sendData() {
     .then(function (res) {
       console.log('Sent data', res);
       updateUI();
-    })
+    });
 }
 
 // register background sync task when user tries to submit a new post

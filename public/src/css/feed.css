@@ -19,7 +19,11 @@
   margin: auto;
 }
 
-#create-post #pick-image, #create-post #location-loader {
+/* #create-post #image-picker-area {
+  display: block;
+} */
+
+#create-post #location-loader {
   display: none;
 }
 
